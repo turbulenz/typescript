@@ -89,6 +89,7 @@ module TypeScript {
         public minWhitespace = false;
         public parseOnly = false;
         public errorRecovery = false;
+        public noOutputOnError = false;
         public emitComments = false;
         public watch = false;
         public exec = false;
