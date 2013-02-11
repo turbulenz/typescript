@@ -178,7 +178,9 @@ class BatchCompiler {
 
         try {
             if (!this.compilationSettings.parseOnly) {
-                compiler.typeCheck();
+                if (!this.compilationSettings.ignoreTypeErrors) {
+                    compiler.typeCheck();
+                }
                 if (!compiler.errorReporter.hasErrors ||
                     !this.compilationSettings.noOutputOnError) {
                     compiler.emit(emitterIOHost);
@@ -303,6 +305,13 @@ class BatchCompiler {
             usage: 'Completely fail on type errors (no .js or .d.ts output)',
             set: () => {
                 this.compilationSettings.noOutputOnError = true;
+            }
+        });
+
+        opts.flag('ignoretypeerrors', {
+            usage: 'Ignore type errors (exit 0 unless there is a syntax error)',
+            set: () => {
+                this.compilationSettings.ignoreTypeErrors = true;
             }
         });
 

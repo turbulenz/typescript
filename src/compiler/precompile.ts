@@ -90,6 +90,7 @@ module TypeScript {
         public parseOnly = false;
         public errorRecovery = false;
         public noOutputOnError = false;
+        public ignoreTypeErrors = false;
         public emitComments = false;
         public watch = false;
         public exec = false;
