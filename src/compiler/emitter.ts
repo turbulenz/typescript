@@ -1394,7 +1394,9 @@ module TypeScript {
 
             ast.emit(this, tokenId, startLine);
 
-            if ((tokenId == TokenID.Semicolon) && (ast.nodeType < NodeType.GeneralNode)) {
+            if ((tokenId == TokenID.Semicolon) &&
+                (ast.nodeType < NodeType.GeneralNode) &&
+                (ast.nodeType > NodeType.EmptyExpr)) {
                 this.writeToOutput(";");
             }
         }
