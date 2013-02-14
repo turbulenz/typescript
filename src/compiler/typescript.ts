@@ -625,6 +625,11 @@ module TypeScript {
             }
 
             this.typeChecker.locationInfo = script.locationInfo;
+
+            var srcName = (script.locationInfo) ? (script.locationInfo.filename) : ("(stdin)");
+            emitter.writeLineToOutput("/* This file was generated from TypeScript source " + srcName + " */");
+            emitter.writeLineToOutput("");
+
             emitter.emitJavascript(script, TokenID.Comma, false);
             if (!reuseEmitter) {
                 emitter.Close();
