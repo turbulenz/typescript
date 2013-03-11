@@ -1,6 +1,6 @@
 //﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -47,10 +47,10 @@ class CommandLineHost implements TypeScript.IResolverHost {
     public pathMap: any = {};
     public resolvedPaths: any = {};
 
-    constructor(public compilationSettings: TypeScript.CompilationSettings, public errorReporter: (err:string)=>void) { 
+    constructor(public compilationSettings: TypeScript.CompilationSettings, public errorReporter: (err:string)=>void) {
     }
 
-    public getPathIdentifier(path: string) { 
+    public getPathIdentifier(path: string) {
         return this.compilationSettings.useCaseSensitiveFileResolution ? path : path.toLocaleUpperCase();
     }
 
@@ -66,14 +66,14 @@ class CommandLineHost implements TypeScript.IResolverHost {
         var nCode = preEnv.code.length;
         var path = "";
 
-        var postResolutionError = 
+        var postResolutionError =
             (errorFile: string, errorMessage: string) => {
                 this.errorReporter(errorFile + (errorMessage == "" ? "" : ": " + errorMessage));
             }
 
         var resolutionDispatcher: TypeScript.IResolutionDispatcher = {
             postResolutionError: (errorFile, line, col, errorMessage) => {
-                this.errorReporter(errorFile + "(" + line + "," + col + ") " + (errorMessage == "" ? "" : ": " + errorMessage));
+                this.errorReporter(errorFile + ":" + line + ":" + col + ": error: " + (errorMessage == "" ? "" : ": " + errorMessage));
             },
             postResolution: (path: string, code: TypeScript.ISourceText) => {
                 var pathId = this.getPathIdentifier(path);
@@ -102,7 +102,7 @@ class BatchCompiler {
     public printedVersion = false;
     public errorReporter: ErrorReporter = null;
 
-    constructor (public ioHost: IIO) { 
+    constructor (public ioHost: IIO) {
         this.compilationSettings = new TypeScript.CompilationSettings();
         this.compilationEnvironment = new TypeScript.CompilationEnvironment(this.compilationSettings, this.ioHost);
         this.errorReporter = new ErrorReporter(this.ioHost);
@@ -127,7 +127,7 @@ class BatchCompiler {
 
         return ret;
     }
-    
+
     /// Do the actual compilation reading from input files and
     /// writing to output file(s).
     public compile(): bool {
@@ -160,7 +160,7 @@ class BatchCompiler {
 
                 if (!this.compilationSettings.resolve) {
                     code.content = this.ioHost.readFile(code.path);
-                    // If declaration files are going to be emitted, 
+                    // If declaration files are going to be emitted,
                     // preprocess the file contents and add in referenced files as well
                     if (this.compilationSettings.generateDeclarationFiles) {
                         TypeScript.CompilerDiagnostics.assert(code.referencedFiles == null, "With no resolve option, referenced files need to null");
@@ -494,7 +494,7 @@ class BatchCompiler {
         }, 'v');
 
         opts.parse(this.ioHost.arguments);
-        
+
         if (this.compilationSettings.useDefaultLib) {
             var compilerFilePath = this.ioHost.getExecutingFilePath()
             var binDirPath = this.ioHost.dirName(compilerFilePath);
@@ -539,7 +539,7 @@ class BatchCompiler {
             // Watch will cause the program to stick around as long as the files exist
             this.watchFiles(sourceFiles);
         }
-        else {  
+        else {
             // Exit with the appropriate error code
             this.ioHost.quit(this.errorReporter.hasErrors ? 1 : 0);
         }
