@@ -1,4 +1,4 @@
-﻿//﻿
+//﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -142,7 +142,7 @@ class BatchCompiler {
                 var lineCol = { line: -1, col: -1 };
                 compiler.parser.getSourceLineCol(lineCol, minChar);
                 // line is 1-base, col, however, is 0-base. add 1 to the col before printing the message
-                var msg = fname + " (" + lineCol.line + "," + (lineCol.col + 1) + "): " + message;
+                var msg = fname + ":" + lineCol.line + ":" + (lineCol.col + 1) + ": error: " + message;
                 if (this.compilationSettings.errorRecovery) {
                     this.errorReporter.WriteLine(msg);
                 } else {
@@ -203,12 +203,17 @@ class BatchCompiler {
 
         try {
             if (!this.compilationSettings.parseOnly) {
-                compiler.typeCheck();
+                if (!this.compilationSettings.ignoreTypeErrors) {
+                    compiler.typeCheck();
+                }
                 var mapInputToOutput = (unitIndex: number, outFile: string): void => {
                     this.compilationEnvironment.inputOutputMap[unitIndex] = outFile;
                 };
-                compiler.emit(emitterIOHost, mapInputToOutput);
-                compiler.emitDeclarations();
+                if (!compiler.errorReporter.hasErrors ||
+                    !this.compilationSettings.noOutputOnError) {
+                    compiler.emit(emitterIOHost, mapInputToOutput);
+                    compiler.emitDeclarations();
+                }
             }
             else {
                 compiler.emitAST(emitterIOHost);
@@ -324,6 +329,20 @@ class BatchCompiler {
                 this.compilationSettings.errorRecovery = true;
             }
         }, 'er');
+
+        opts.flag('failonerror', {
+            usage: 'Completely fail on type errors (no .js or .d.ts output)',
+            set: () => {
+                this.compilationSettings.noOutputOnError = true;
+            }
+        });
+
+        opts.flag('ignoretypeerrors', {
+            usage: 'Ignore type errors (exit 0 unless there is a syntax error)',
+            set: () => {
+                this.compilationSettings.ignoreTypeErrors = true;
+            }
+        });
 
         opts.flag('comments', {
             usage: 'Emit comments to output',

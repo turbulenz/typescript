@@ -1,4 +1,4 @@
-﻿//﻿
+//﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,6 +89,8 @@ module TypeScript {
         public minWhitespace = false;
         public parseOnly = false;
         public errorRecovery = false;
+        public noOutputOnError = false;
+        public ignoreTypeErrors = false;
         public emitComments = false;
         public watch = false;
         public exec = false;
