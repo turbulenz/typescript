@@ -53,7 +53,7 @@ class ErrorReporter implements TypeScript.IDignosticsReporter {
             var lineCol = { line: -1, character: -1 };
             lineMap.fillLineAndCharacterFromPosition(diagnostic.start(), lineCol);
 
-            this.ioHost.stderr.Write(diagnostic.fileName() + "(" + (lineCol.line + 1) + "," + (lineCol.character+1) + "): ");
+            this.ioHost.stderr.Write(diagnostic.fileName() + ":" + (lineCol.line + 1) + ":" + (lineCol.character+1) + ":error: ");
         }
 
         this.ioHost.stderr.WriteLine(diagnostic.message());
