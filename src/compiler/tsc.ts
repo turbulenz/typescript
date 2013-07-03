@@ -419,6 +419,20 @@ class BatchCompiler {
             set: () => { this.compilationSettings.propagateConstants = true; }
         });
 
+        opts.flag('failonerror', {
+            usage: 'Completely fail on type errors (no .js or .d.ts output)',
+            set: () => {
+                this.compilationSettings.noOutputOnError = true;
+            }
+        });
+
+        opts.flag('ignoretypeerrors', {
+            usage: 'Ignore type errors (exit 0 unless there is a syntax error)',
+            set: () => {
+                this.compilationSettings.ignoreTypeErrors = true;
+            }
+        });
+
         opts.flag('comments', {
             usage: 'Emit comments to output',
             set: () => {

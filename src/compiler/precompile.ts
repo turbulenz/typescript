@@ -21,6 +21,8 @@ module TypeScript {
     export class CompilationSettings {
         public propagateConstants = false;
         public minWhitespace = false;
+        public noOutputOnError = false;
+        public ignoreTypeErrors = false;
         public emitComments = false;
         public watch = false;
         public exec = false;
