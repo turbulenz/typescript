@@ -8,6 +8,8 @@ module TypeScript {
         _0__NL__1_TB__2,
         _0_TB__1,
 
+        _other_diagnostics,
+
         // Syntactic diagnostics.
         Unrecognized_escape_sequence,
         Unexpected_character_0,
@@ -76,6 +78,7 @@ module TypeScript {
         Module_cannot_have_multiple_export_assignments,
 
 
+        _syntax_diagnostics, // ???
 
 
 
@@ -281,6 +284,7 @@ module TypeScript {
         Enums_with_multiple_declarations_must_provide_an_initializer_for_the_first_enum_element,
 
 
+        _semantic_diagnostics,
 
 
         //Batch compiler diagnostics

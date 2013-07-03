@@ -42,6 +42,29 @@ class ErrorReporter implements TypeScript.IDignosticsReporter {
     }
 
     public addDiagnostic(diagnostic: TypeScript.IDiagnostic) {
+
+        // Optionally filter out type errors.  This is nasty.  It
+        // relies on too many assumptions about the DiagnosticCode
+        // enum.
+
+        var code = diagnostic.diagnosticCode();
+        if (code < TypeScript.DiagnosticCode._other_diagnostics) {
+            // process.stdout.write("TBLZ: other error\n");
+
+        } else if (code < TypeScript.DiagnosticCode._syntax_diagnostics) {
+            // process.stdout.write("TBLZ: syntax error\n");
+
+        } else if (code < TypeScript.DiagnosticCode._semantic_diagnostics) {
+            // process.stdout.write("TBLZ: type error\n");
+            if (this.compilationEnvironment.compilationSettings.ignoreTypeErrors) {
+                // process.stdout.write("TBLZ: (ignoring)\n");
+                return;
+            }
+
+        } else {
+            // process.stdout.write("TBLZ: batch compiler error\n");
+        }
+
         this.hasErrors = true;
 
         if (diagnostic.fileName()) {
@@ -216,7 +239,16 @@ class BatchCompiler {
                 anySemanticErrors = true;
                 compiler.reportDiagnostics(semanticDiagnostics, this.errorReporter);
             }
-        }  
+        }
+
+        // Don't write out any files if --failonerror is specified and
+        // there are type errors.
+
+        if (this.compilationSettings.noOutputOnError) {
+            if (anySemanticErrors) {
+                return true;
+            }
+        }
 
         var emitterIOHost = {
             writeFile: (fileName: string, contents: string, writeByteOrderMark: boolean) => IOUtils.writeFileAndFolderStructure(this.ioHost, fileName, contents, writeByteOrderMark),
