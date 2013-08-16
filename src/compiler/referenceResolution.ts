@@ -37,6 +37,10 @@ module TypeScript {
         }
 
         public getLength(): number {
+            var fileInfo = this.fileInformation;
+            if (!fileInfo) {
+                throw ("No such file: " + this.path);
+            }
             return this.fileInformation.contents().length;
         }
 
