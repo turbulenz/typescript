@@ -19,6 +19,8 @@ module TypeScript {
 
     /// Compiler settings
     export class CompilationSettings {
+        public noOutputOnError = false;
+        public ignoreTypeErrors = false;
         public propagateEnumConstants = false;
         public removeComments = false;
         public watch = false;

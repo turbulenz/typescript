@@ -389,6 +389,26 @@ module TypeScript {
                 }, 'w');
             }
 
+            opts.flag('failonerror', {
+                usage: {
+                    locCode: "fail on type err", // DiagnosticCode.Completely_fail_on_type_error,
+                    args: null
+                },
+                set: () => {
+                    this.compilationSettings.noOutputOnError = true;
+                }
+            });
+
+            opts.flag('ignoretypeerrors', {
+                usage: {
+                    locCode: "ignore type errors", // DiagnosticCode.Ignore_type_errors,
+                    args: null
+                },
+                set: () => {
+                    this.compilationSettings.ignoreTypeErrors = true;
+                }
+            });
+
             opts.flag('propagateEnumConstants', {
                 experimental: true,
                 set: () => { this.compilationSettings.propagateEnumConstants = true; }
@@ -763,7 +783,20 @@ module TypeScript {
 
         /// IDiagnosticsReporter methods
         addDiagnostic(diagnostic: Diagnostic) {
-            this.hasErrors = true;
+
+            var diagKey = diagnostic.diagnosticKey();
+            var diagInfo = getDiagnosticInfoFromKey(diagKey);
+            // var diagCategory = diagInfo.category;
+            // process.stdout.write("DIAG: " + JSON.stringify(diagInfo) + "\n");
+
+            var ignore = this.compilationSettings.ignoreTypeErrors &&
+                (diagInfo.code >= 2000);
+
+            if (ignore) {
+                // process.stdout.write("Ignoring\n");
+            } else {
+                this.hasErrors = true;
+            }
 
             if (diagnostic.fileName()) {
                 var scriptSnapshot = this.getScriptSnapshot(diagnostic.fileName());
@@ -771,14 +804,25 @@ module TypeScript {
                 var lineCol = { line: -1, character: -1 };
                 lineMap.fillLineAndCharacterFromPosition(diagnostic.start(), lineCol);
 
-                this.ioHost.stderr.Write(diagnostic.fileName() + "(" + (lineCol.line + 1) + "," + (lineCol.character + 1) + "): ");
+                if (!ignore) {
+                    this.ioHost.stderr.Write(diagnostic.fileName() + ":" + (lineCol.line + 1) + ":" + (lineCol.character+1) + ":error: ");
+                }
             }
 
-            this.ioHost.stderr.WriteLine(diagnostic.message());
+            if (!ignore) {
+                this.ioHost.stderr.WriteLine(diagnostic.message());
+            }
         }
 
         /// EmitterIOHost methods
         writeFile(fileName: string, contents: string, writeByteOrderMark: boolean): void {
+
+            if (this.compilationSettings.noOutputOnError &&
+                this.hasErrors) {
+                // process.stdout.write("Not writing file\n");
+                return;
+            }
+
             var start = new Date().getTime();
             IOUtils.writeFileAndFolderStructure(this.ioHost, fileName, contents, writeByteOrderMark);
             TypeScript.emitWriteFileTime += new Date().getTime() - start;

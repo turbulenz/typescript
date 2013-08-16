@@ -319,6 +319,8 @@ declare module TypeScript {
         Error_while_executing_file_0: string;
         Use_of_an_external_module_requires_the_module_flag_to_be_supplied_to_the_compiler: string;
         Concatenate_and_emit_output_to_single_file_Redirect_output_structure_to_the_directory: string;
+        Completely_fail_on_type_error: string;
+        Ignore_type_errors: string;
         Generates_corresponding_0_file: string;
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: string;
         Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations: string;

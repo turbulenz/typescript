@@ -321,6 +321,8 @@ var TypeScript;
         Error_while_executing_file_0: "Error while executing file '{0}': ",
         Use_of_an_external_module_requires_the_module_flag_to_be_supplied_to_the_compiler: "Use of an external module requires the '--module' flag to be supplied to the compiler.",
         Concatenate_and_emit_output_to_single_file_Redirect_output_structure_to_the_directory: "Concatenate and emit output to single file | Redirect output structure to the directory",
+        Completely_fail_on_type_error: "Completely fail on type errors (no .js or .d.ts output)",
+        Ignore_type_errors: "Ignore type errors (exit 0 unless there is a syntax error)",
         Generates_corresponding_0_file: "Generates corresponding {0} file",
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: "Specifies the location where debugger should locate map files instead of generated locations.",
         Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations: "Specifies the location where debugger should locate TypeScript files instead of source locations.",
@@ -1759,6 +1761,14 @@ var TypeScript;
         },
         "LOCATION": {
             "code": 6037,
+            "category": 2 /* Message */
+        },
+        "Completely fail on type errors (no .js or .d.ts output)": {
+            "code": 6100,
+            "category": 2 /* Message */
+        },
+        "Ignore type errors (exit 0 unless there is a syntax error)": {
+            "code": 6100,
             "category": 2 /* Message */
         },
         "This version of the Javascript runtime does not support the '{0}' function.": {
