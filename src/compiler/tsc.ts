@@ -789,8 +789,12 @@ module TypeScript {
             // var diagCategory = diagInfo.category;
             // process.stdout.write("DIAG: " + JSON.stringify(diagInfo) + "\n");
 
+            // This is so rough and unreliable.  See
+            // diagnosticInformationMap.
+
             var ignore = this.compilationSettings.ignoreTypeErrors &&
-                (diagInfo.code >= 2000);
+                (diagInfo.code >= 2000) &&
+                (diagInfo.code < 5000);
 
             if (ignore) {
                 // process.stdout.write("Ignoring\n");
