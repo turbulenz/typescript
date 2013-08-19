@@ -960,6 +960,13 @@ module TypeScript {
                         for (var j = 0; j < scriptReferences.length; j++) {
                             var currentReference = scriptReferences[j];
                             var document = this.compiler.getDocument(currentReference);
+
+                            if (!document)
+                            {
+                                process.stdout.write("No doc for ref: " +
+                                                     JSON.stringify(currentReference));
+                            }
+
                             // All the references that are not going to be part of same file
                             if (document.script.isDeclareFile || document.script.topLevelMod) {
                                 for (var k = 0; k < documents.length; k++) {
